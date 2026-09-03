@@ -40,7 +40,7 @@ class AppBootstrap extends Bootstrap
         );
     }
 
-    public function run(AppInterface $application): void
+    public function run(AppInterface $application, bool $resetState = true): void
     {
         try {
             try {
@@ -61,11 +61,13 @@ class AppBootstrap extends Bootstrap
         } catch (Throwable $e) {
             $this->terminate($e);
         } finally {
-            $this->resetState();
+            if ($resetState) {
+                $this->resetState();
+            }
         }
     }
 
-    private function resetState(): void
+    public function resetState(): void
     {
         $objectManager = $this->getObjectManager();
         $reloadProcessor = $objectManager->get(ReloadProcessorInterface::class);
